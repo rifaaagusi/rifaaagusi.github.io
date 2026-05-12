@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Rifa Agus Iftinan — Visual Designer & Video Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0e0e0d;--surface:#161614;--surface2:#1f1f1c;
+    --white:#f0ede6;--muted:#6b6a65;--border:#2a2a27;
+    --accent:#ff5c1a;--accent-dim:rgba(255,92,26,0.12);
+    --font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--white);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:1.6rem 2.5rem;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(14,14,13,0.95);backdrop-filter:blur(12px);z-index:99}
+  .nav-logo{font-family:var(--font-display);font-size:1.05rem;color:var(--white)}
+  .nav-logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:2rem}
+  .nav-links a{font-size:11px;text-decoration:none;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover{color:var(--accent)}
+
+  /* HERO */
+  .hero{padding:6rem 2.5rem 5rem;display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:center;max-width:1040px;margin:0 auto}
+  .hero-tag{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1.4rem;display:flex;align-items:center;gap:8px}
+  .hero-tag::before{content:'';width:24px;height:1px;background:var(--accent)}
+  .hero-name{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,3.8rem);font-weight:400;line-height:1.08;margin-bottom:1.6rem}
+  .hero-name em{font-style:italic;color:var(--muted)}
+  .hero-bio{font-size:14px;color:var(--muted);line-height:1.95;margin-bottom:2.2rem;max-width:420px}
+  .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:11px 26px;border:0.5px solid var(--border);background:transparent;cursor:pointer;transition:all .25s;text-decoration:none;color:var(--white);display:inline-block}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-fill{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  .btn-fill:hover{background:transparent;color:var(--accent)}
+  .hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem 1.5rem;border-left:0.5px solid var(--border);padding-left:3.5rem}
+  .stat-num{font-family:var(--font-display);font-size:2.2rem;font-weight:400;line-height:1}
+  .stat-num span{color:var(--accent);font-size:1.4rem}
+  .stat-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
+  /* SECTION */
+  .sec{max-width:1040px;margin:0 auto;padding:3.5rem 2.5rem}
+  .sec-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.2rem;border-bottom:0.5px solid var(--border)}
+  .sec-title{font-family:var(--font-display);font-size:1.7rem;font-weight:400}
+  .sec-sub{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+  .sec-divider{border:none;border-top:0.5px solid var(--border);max-width:1040px;margin:0 auto}
+
+  /* DESIGN GRID */
+  .design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+  .card{background:var(--surface);cursor:pointer;overflow:hidden;aspect-ratio:4/3;position:relative}
+  .card-img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease,filter .3s;display:block;filter:brightness(0.82)}
+  .card:hover .card-img{transform:scale(1.05);filter:brightness(0.5)}
+  .card-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1.4rem}
+  .card-info{opacity:0;transform:translateY(10px);transition:all .3s}
+  .card:hover .card-info{opacity:1;transform:translateY(0)}
+  .card-title{color:var(--white);font-size:13px;font-weight:500}
+  .card-cat{color:var(--accent);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px}
+  .card-wide{grid-column:span 2}
+  /* view project hint */
+  .card-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--accent);color:var(--bg);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;opacity:0;transition:opacity .3s;white-space:nowrap;font-family:var(--font-body);font-weight:500}
+  .card:hover .card-hint{opacity:1}
+
+  /* ── LIGHTBOX ── */
+  .lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.96);z-index:1000;display:none;flex-direction:column;opacity:0;transition:opacity .3s}
+  .lb-overlay.open{display:flex;opacity:1}
+  .lb-header{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 2rem;border-bottom:0.5px solid #2a2a27;flex-shrink:0}
+  .lb-title{font-family:var(--font-display);font-size:1.1rem;color:var(--white)}
+  .lb-meta{font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px}
+  .lb-close{width:40px;height:40px;border:0.5px solid #2a2a27;background:transparent;cursor:pointer;color:var(--white);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+  .lb-close:hover{border-color:var(--accent);color:var(--accent)}
+  .lb-body{flex:1;overflow-y:auto;padding:2rem}
+  .lb-body::-webkit-scrollbar{width:4px}
+  .lb-body::-webkit-scrollbar-track{background:transparent}
+  .lb-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  /* masonry-style grid inside lightbox */
+  .lb-grid{columns:2;column-gap:1rem;max-width:900px;margin:0 auto}
+  .lb-grid img{width:100%;display:block;margin-bottom:1rem;break-inside:avoid;cursor:zoom-in;transition:opacity .2s}
+  .lb-grid img:hover{opacity:0.85}
+  .lb-nav{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+  .lb-counter{font-size:11px;color:var(--muted);letter-spacing:0.05em}
+  /* fullsize image viewer */
+  .lb-zoom{position:fixed;inset:0;background:rgba(0,0,0,0.98);z-index:1100;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+  .lb-zoom.open{display:flex}
+  .lb-zoom img{max-width:95vw;max-height:95vh;object-fit:contain}
+  .lb-zoom-close{position:absolute;top:1.2rem;right:1.5rem;background:transparent;border:0.5px solid #444;color:var(--white);width:38px;height:38px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+  /* VIDEO TABS */
+  .video-tabs{display:flex;gap:2px;background:var(--surface);border:0.5px solid var(--border);padding:3px;width:fit-content;margin-bottom:2rem}
+  .tab{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:6px 16px;background:transparent;cursor:pointer;color:var(--muted);transition:all .2s;border:none}
+  .tab.active{background:var(--accent);color:var(--bg)}
+  .tab:not(.active):hover{color:var(--white)}
+  .landscape-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .vid-card{background:var(--surface);border:0.5px solid var(--border);overflow:hidden;transition:border-color .25s}
+  .vid-card:hover{border-color:var(--accent)}
+  .vid-embed{width:100%;aspect-ratio:16/9;display:block;border:none}
+  .vid-label{padding:0.9rem 1.1rem;border-top:0.5px solid var(--border)}
+  .vid-label-title{font-size:13px;font-weight:500}
+  .vid-label-cat{font-size:11px;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-top:3px}
+  .shorts-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  .short-card{background:var(--surface);border:0.5px solid var(--border);overflow:hidden;transition:border-color .25s}
+  .short-card:hover{border-color:var(--accent)}
+  .short-embed{width:100%;aspect-ratio:9/16;display:block;border:none}
+  .short-label{padding:0.7rem 0.9rem;border-top:0.5px solid var(--border)}
+  .short-label-title{font-size:12px;font-weight:500}
+  .short-label-cat{font-size:10px;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+  .video-panel{display:none}
+  .video-panel.active{display:block}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem}
+  .about-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+  .about-text{font-size:14px;color:var(--muted);line-height:1.95}
+  .available-badge{display:inline-flex;align-items:center;gap:7px;margin-top:1.4rem;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent)}
+  .available-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .skills-list{display:flex;flex-direction:column}
+  .skill-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:0.5px solid var(--border)}
+  .skill-row:first-child{border-top:0.5px solid var(--border)}
+  .skill-name{font-size:13px}
+  .skill-dots{display:flex;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--border)}
+  .dot.on{background:var(--accent)}
+
+  /* EXPERIENCE */
+  .exp-list{display:flex;flex-direction:column}
+  .exp-item{display:grid;grid-template-columns:180px 1fr;gap:2.5rem;padding:1.8rem 0;border-bottom:0.5px solid var(--border)}
+  .exp-item:first-child{border-top:0.5px solid var(--border)}
+  .exp-date{font-size:12px;color:var(--muted);line-height:1.7;padding-top:2px}
+  .exp-badge{display:inline-block;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;margin-bottom:7px;border:0.5px solid}
+  .exp-badge.full{color:var(--accent);border-color:var(--accent);background:var(--accent-dim)}
+  .exp-badge.intern{color:var(--muted);border-color:var(--border)}
+  .exp-badge.cert{color:#7ec8c8;border-color:#7ec8c8;background:rgba(126,200,200,0.08)}
+  .exp-role{font-size:14px;font-weight:500;margin-bottom:3px}
+  .exp-company{font-size:13px;color:var(--accent);margin-bottom:7px}
+  .exp-desc{font-size:13px;color:var(--muted);line-height:1.85}
+
+  /* CONTACT */
+  .contact-wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2.5rem}
+  .contact-heading{font-family:var(--font-display);font-size:2.2rem;font-weight:400;margin-bottom:0.5rem}
+  .contact-sub{font-size:13px;color:var(--muted)}
+  .contact-links{display:flex;gap:1.2rem;margin-top:1.6rem;flex-wrap:wrap}
+  .contact-link{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:0.5px solid var(--border);padding-bottom:2px;transition:color .2s,border-color .2s}
+  .contact-link:hover{color:var(--accent);border-color:var(--accent)}
+  footer{padding:1.6rem 2.5rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;max-width:1040px;margin:0 auto}
+  footer p{font-size:11px;color:var(--muted);letter-spacing:0.05em}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .hero{grid-template-columns:1fr;gap:3rem}
+    .hero-stats{border-left:none;padding-left:0;grid-template-columns:repeat(2,1fr)}
+    .design-grid{grid-template-columns:repeat(2,1fr)}
+    .card-wide{grid-column:span 1}
+    .landscape-grid{grid-template-columns:1fr}
+    .shorts-grid{grid-template-columns:repeat(2,1fr)}
+    .about-grid{grid-template-columns:1fr}
+    .exp-item{grid-template-columns:1fr;gap:0.6rem}
+    .contact-wrap{flex-direction:column}
+    .lb-grid{columns:1}
+  }
+  @media(max-width:480px){
+    nav{padding:1.2rem}
+    .sec{padding:2.5rem 1.2rem}
+    .hero{padding:3.5rem 1.2rem 3rem}
+    .shorts-grid{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Rifa<span>.</span></div>
+  <div class="nav-links">
+    <a href="#design">Design</a>
+    <a href="#video">Video</a>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="hero-tag">Visual Designer · Video Editor · Animator</p>
+    <h1 class="hero-name">Crafting visuals <em>that speak</em></h1>
+    <p class="hero-bio">Based in Bekasi, Indonesia — I design identities, key visuals, and motion content for brands and events. From logos to reels, I make ideas look good.</p>
+    <div class="hero-btns">
+      <a href="#design" class="btn btn-fill">View work</a>
+      <a href="#contact" class="btn">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div><div class="stat-num">20<span>+</span></div><div class="stat-label">Videos / week</div></div>
+    <div><div class="stat-num">50<span>+</span></div><div class="stat-label">Clients served</div></div>
+    <div><div class="stat-num">3<span>+</span></div><div class="stat-label">Years active</div></div>
+    <div><div class="stat-num">300<span>+</span></div><div class="stat-label">Event attendees</div></div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- DESIGN WORK -->
+<div class="sec" id="design">
+  <div class="sec-top">
+    <h2 class="sec-title">Design Work</h2>
+    <span class="sec-sub">Click any project to view all images</span>
+  </div>
+  <div class="design-grid">
+
+    <div class="card card-wide" onclick="openLightbox('astra')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/46ef2a226188903.682aaaf78b453.png" alt="Astra Finance" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Astra Finance — Farewell Event</div><div class="card-cat">Key Visual · Graphic Design</div></div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openLightbox('sorrow')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/570b34226189863.682ab0e358d45.png" alt="Sorrow Hill" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Sorrow Hill Band Logo</div><div class="card-cat">Logo Design</div></div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openLightbox('linknet')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/3c0e0d226188111.682aa5b550f33.png" alt="Linknet" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Linknet Infinite Links</div><div class="card-cat">Key Visual · Graphic Design</div></div>
+      </div>
+    </div>
+
+    <div class="card card-wide" onclick="openLightbox('rubrik')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/4b0e16231648175.688ccf88461f5.png" alt="Rubrik Olahraga" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Rubrik Olahraga Magazine</div><div class="card-cat">Editorial · Print Design</div></div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openLightbox('osaka')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/cd86e3231790991.689040b29e0df.png" alt="Osaka Logo Animation" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Osaka Logo Animation</div><div class="card-cat">Motion Graphics</div></div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openLightbox('ceki')">
+      <img class="card-img" src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/562164231799155.689065f7e99ec.png" alt="Custom Ceki Card" loading="lazy">
+      <div class="card-overlay">
+        <div class="card-hint">View Project</div>
+        <div class="card-info"><div class="card-title">Custom Ceki Card</div><div class="card-cat">Illustration · Design</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="sec-divider">
+
+<!-- VIDEO WORK -->
+<div class="sec" id="video">
+  <div class="sec-top">
+    <h2 class="sec-title">Video Work</h2>
+    <span class="sec-sub">Editing · Motion · Reels</span>
+  </div>
+  <div class="video-tabs">
+    <button class="tab active" onclick="switchVideo(this,'landscape')">Landscape</button>
+    <button class="tab" onclick="switchVideo(this,'shorts')">Shorts / Reels</button>
+  </div>
+
+  <div class="video-panel active" id="panel-landscape">
+    <div class="landscape-grid">
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/pwiyCeGrpZs" title="Video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #1</div><div class="vid-label-cat">Video Editing</div></div></div>
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/uN1aMgaNYZs" title="Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #2</div><div class="vid-label-cat">Video Editing</div></div></div>
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/nl7bO_LjODs" title="Video 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #3</div><div class="vid-label-cat">Video Editing</div></div></div>
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/rKujzLgTZfo" title="Video 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #4</div><div class="vid-label-cat">Video Editing</div></div></div>
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/bkXyHNCRPOI" title="Video 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #5</div><div class="vid-label-cat">Video Editing</div></div></div>
+      <div class="vid-card"><iframe class="vid-embed" src="https://www.youtube-nocookie.com/embed/5aJ-YH2gTRA" title="Video 6" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="vid-label"><div class="vid-label-title">Video Edit #6</div><div class="vid-label-cat">Video Editing</div></div></div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="panel-shorts">
+    <div class="shorts-grid">
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/_BFL82uKlH4" title="Short 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #1</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/2NANvkqZfz8" title="Short 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #2</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/tHxzSdIEVgs" title="Short 3" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #3</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/TImRXRlo_uQ" title="Short 4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #4</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/YzvRoiGBsX0" title="Short 5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #5</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/FGz4xS-N6JM" title="Short 6" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #6</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/5dLMF-4avFE" title="Short 7" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #7</div><div class="short-label-cat">Reels · Motion</div></div></div>
+      <div class="short-card"><iframe class="short-embed" src="https://www.youtube-nocookie.com/embed/RBzpflBb2Ss" title="Short 8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe><div class="short-label"><div class="short-label-title">Short #8</div><div class="short-label-cat">Reels · Motion</div></div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="sec-divider">
+
+<!-- ABOUT -->
+<div class="sec" id="about">
+  <div class="sec-top"><h2 class="sec-title">About me</h2></div>
+  <div class="about-grid">
+    <div>
+      <p class="about-label">Who I am</p>
+      <p class="about-text">I'm a Visual Communication Designer based in Bekasi, Indonesia, working across graphic design, video editing, 2D animation, and motion graphics. I help brands and events communicate through strong visuals — from identity systems and print to social videos and logo animations.</p>
+      <br>
+      <p class="about-text">I hold a Bachelor's degree in Visual Communication Design (GPA 3.52) from Universitas Indraprasta PGRI, and I'm highly proficient in English (TOEFL 617).</p>
+      <div class="available-badge">Available for freelance projects</div>
+    </div>
+    <div>
+      <p class="about-label">Skills & tools</p>
+      <div class="skills-list">
+        <div class="skill-row"><span class="skill-name">Adobe Photoshop</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Adobe Illustrator</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Adobe Premiere Pro</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Adobe After Effects</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Adobe InDesign</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Adobe Lightroom</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Canva</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Blender 3D</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">AI Tools & Workflows</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+        <div class="skill-row"><span class="skill-name">Motion Graphics</span><div class="skill-dots"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="sec-divider">
+
+<!-- EXPERIENCE -->
+<div class="sec" id="experience">
+  <div class="sec-top"><h2 class="sec-title">Experience</h2><span class="sec-sub">3+ years across the creative pipeline</span></div>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-date">Sep 2025 — Present<br><br><span class="exp-badge full">Full-time</span></div>
+      <div><div class="exp-role">Graphic Designer</div><div class="exp-company">PT. Pixel Multi Kreasindo — Jakarta</div><div class="exp-desc">Designed book content layouts and covers for 50+ schools including Al Azhar, Labschool, and Nurul Fikri. Managed the full design pipeline from client consultation to print-ready delivery.</div></div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jan – May 2025<br><br><span class="exp-badge intern">Internship</span></div>
+      <div><div class="exp-role">Video Editor Intern</div><div class="exp-company">PT. Summarecon Agung, Tbk. — Bekasi</div><div class="exp-desc">Produced educational training videos for corporate staff and created 2D character animations to enhance visual engagement of training materials.</div></div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Aug – Nov 2024<br><br><span class="exp-badge intern">Internship</span></div>
+      <div><div class="exp-role">Video Editor Intern</div><div class="exp-company">Lahya Creative — Jakarta</div><div class="exp-desc">Managed video projects for multiple clients including Kindai Tours & Travel, Bensfarm, and Safir Tours & Travel. Delivered up to 8 video contents per week per client.</div></div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Feb – Jun 2024<br><br><span class="exp-badge intern">Internship</span></div>
+      <div><div class="exp-role">Content Creator Staff</div><div class="exp-company">Vocasia.id – Bisnis Miracle — Jakarta</div><div class="exp-desc">Edited 3–4 weekly video contents for the Bisnis Miracle YouTube Channel.</div></div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Aug – Dec 2023<br><br><span class="exp-badge cert">Kampus Merdeka</span></div>
+      <div><div class="exp-role">Video Animator & Editor Lead</div><div class="exp-company">PT Menara Indonesia – M-Knows — Jakarta</div><div class="exp-desc">Led a team of 14 to produce 20+ videos per week. Managed the full video pipeline: assembly, colour grading, pop-up text, b-rolls, animations, and team coordination.</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="sec-divider">
+
+<!-- CONTACT -->
+<div class="sec" id="contact">
+  <div class="contact-wrap">
+    <div>
+      <h2 class="contact-heading">Let's work <em style="font-style:italic;color:var(--muted)">together</em></h2>
+      <p class="contact-sub">Open for freelance projects, collaborations & commissions.</p>
+      <div class="contact-links">
+        <a href="mailto:rifaagus.i@gmail.com" class="contact-link">rifaagus.i@gmail.com</a>
+        <a href="https://www.behance.net/rifaagusiftinan" class="contact-link" target="_blank">Behance</a>
+        <a href="https://linkedin.com/in/rifaagusiftinan" class="contact-link" target="_blank">LinkedIn</a>
+        <a href="https://www.youtube.com/@BioUnrealBlink" class="contact-link" target="_blank">YouTube</a>
+        <a href="#" class="contact-link">Instagram</a>
+      </div>
+    </div>
+    <a href="mailto:rifaagus.i@gmail.com" class="btn btn-fill">Get in touch →</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Rifa Agus Iftinan</p>
+  <p>Visual Designer · Video Editor · Animator</p>
+</footer>
+
+<!-- ── LIGHTBOX OVERLAY ── -->
+<div class="lb-overlay" id="lb-overlay" onclick="handleOverlayClick(event)">
+  <div class="lb-header">
+    <div>
+      <div class="lb-title" id="lb-title">Project Title</div>
+      <div class="lb-meta" id="lb-meta">Category</div>
+    </div>
+    <div class="lb-nav">
+      <span class="lb-counter" id="lb-counter"></span>
+      <button class="lb-close" onclick="closeLightbox()">✕</button>
+    </div>
+  </div>
+  <div class="lb-body">
+    <div class="lb-grid" id="lb-grid"></div>
+  </div>
+</div>
+
+<!-- ZOOM VIEWER -->
+<div class="lb-zoom" id="lb-zoom" onclick="closeZoom()">
+  <button class="lb-zoom-close" onclick="closeZoom()">✕</button>
+  <img id="lb-zoom-img" src="" alt="">
+</div>
+
+<script>
+// ── PROJECT DATA ──
+const projects = {
+  astra: {
+    title: 'Astra Finance — Farewell Event',
+    meta: 'Key Visual · Graphic Design',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/46ef2a226188903.682aaaf78b453.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/67a10e226188903.682aaaf50cbd1.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/34c256226188903.682aaaf50ab18.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/def2fc226188903.682aaaf50e2cb.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/a3d97f226188903.682aaaf50b84a.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/f9b32b226188903.682aaaf50c5d2.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/e3ab70226188903.682aaaf50d3ff.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/311f40226188903.682aaaf5102e8.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/6c887d226188903.682aaaf50be2f.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/8eee86226188903.682aaaf50eb22.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/a309f4226188903.682aaaf50b3b6.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/adb790226188903.682aaaf50da3b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/1b79aa226188903.682aaaf50a0f9.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/455ae0226188903.682aaaf50fa2e.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/7f1a4d226188903.682aaaf50f1a1.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/12d461226188903.682aaaf6dd9dd.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/0de57b226188903.682aaaf6de17e.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/8a8e04226188903.682aaaf6de6e0.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/a84477226188903.682aaaf6dd075.jpg',
+    ]
+  },
+  linknet: {
+    title: 'Linknet — Infinite Links Event',
+    meta: 'Key Visual · Graphic Design',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/3c0e0d226188111.682aa5b550f33.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/813997226188111.682aa7c9877f0.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/1fabc4226188111.682aa7c985722.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/7e416e226188111.682aa7c983c58.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/47f1e7226188111.682aa7c982f41.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/1273bf226188111.682aa7c9842bb.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/6ced31226188111.682aa7c98649f.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/a573e1226188111.682aa7c985e2c.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/f6d209226188111.682aa7c986c9e.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/ed1688226188111.682aa7c98716c.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/b54f35226188111.682aa7c985073.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/8b2cbc226188111.682aa7c9849ad.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/569fe9226188111.6890594e19a66.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/bb434a226188111.6890594e193b7.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/b31ea3226188111.6890594e1a323.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/7712ab226188111.6890594e18e58.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/9fc34e226188111.6890594e1a910.jpg',
+    ]
+  },
+  sorrow: {
+    title: 'Sorrow Hill Band Logo',
+    meta: 'Logo Design · Branding',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/570b34226189863.682ab0e358d45.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/84ceb1226189863.682ab0e35977b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/51d11b226189863.682ab0dfd914d.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/f0adbc226189863.682ab0dfd8418.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/27766d226189863.682ab0dfd8a82.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/4316d8226189863.682ab0e358524.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/0e267c226189863.682ab0e35924b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/e687ec226189863.682ab0e09d509.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/b29fb7226189863.682ab0e09e036.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/6ec328226189863.682ab0e09e8c7.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/553c15226189863.682ab0e09f2bf.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/b4f3f8226189863.682ab0e1a36ae.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/cb8df0226189863.682ab0e1a3b7a.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/64ebd4226189863.682ab0e1a4c31.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/2feed0226189863.682ab0e1a46d0.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/18876a226189863.682ab0e1a2ead.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9c4c9b226189863.682ab0e1a27ab.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9d8841226189863.682ab0e1a5a4b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/4ce7ea226189863.682ab0e1a4038.png',
+    ]
+  },
+  rubrik: {
+    title: 'Rubrik Olahraga Magazine',
+    meta: 'Editorial · Print Design',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/4b0e16231648175.688ccf88461f5.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/f6518a231648175.688ccf8845981.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/090a3a231648175.6890403912703.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/16821f231648175.6890403912b67.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/4654b6231648175.689040399dd11.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/c309db231648175.689040399d7cf.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/c68ed4231648175.6890403a3a2b0.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/fe85a2231648175.6890403a3a70c.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/47d7d6231648175.6890403ac4c0f.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/909236231648175.6890403ac5307.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/71d826231648175.6890403b74e9d.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/ebfa66231648175.6890403b746fd.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/25af74231648175.6890403bf1e05.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9fefb3231648175.6890403bf23e0.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/b48331231648175.6890403c84aca.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/3720d8231648175.6890403c84585.png',
+    ]
+  },
+  osaka: {
+    title: 'Osaka Logo Animation',
+    meta: 'Motion Graphics · Animation',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/cd86e3231790991.689040b29e0df.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/disp/cd86e3231790991.689040b29e0df.png',
+    ]
+  },
+  ceki: {
+    title: 'Custom Ceki Card',
+    meta: 'Illustration · Design',
+    images: [
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/562164231799155.689065f7e99ec.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/042788231799155.689065f7e8e46.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/1aa678231799155.689065f7e945a.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/54383d231799155.689067f872d83.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/36152d231799155.689067f8727bc.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/b5bfb4231799155.689067f8732ef.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/30fc6f231799155.689065f52721b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/acda39231799155.689065f52363d.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9c9561231799155.689065f5216a0.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/6c8f1e231799155.689065f524905.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/e19490231799155.689065f52108d.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/072d05231799155.689065f53528f.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/35b959231799155.689065f521af8.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/fc44ef231799155.689065f526b44.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/6d533d231799155.689065f523173.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/234b83231799155.689065f520a24.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9a5a5b231799155.689065f51fa8b.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/008713231799155.689065f524efd.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/0440a2231799155.689065f5254c2.png',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200_webp/9a2ef2231799155.689065f523c91.png',
+    ]
+  }
+};
+
+function openLightbox(key) {
+  const p = projects[key];
+  const overlay = document.getElementById('lb-overlay');
+  const grid = document.getElementById('lb-grid');
+
+  document.getElementById('lb-title').textContent = p.title;
+  document.getElementById('lb-meta').textContent = p.meta;
+  document.getElementById('lb-counter').textContent = p.images.length + ' images';
+
+  grid.innerHTML = '';
+  p.images.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = p.title + ' ' + (i + 1);
+    img.loading = 'lazy';
+    img.onclick = (e) => { e.stopPropagation(); openZoom(src); };
+    grid.appendChild(img);
+  });
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('lb-overlay')) closeLightbox();
+}
+
+function openZoom(src) {
+  document.getElementById('lb-zoom-img').src = src;
+  document.getElementById('lb-zoom').classList.add('open');
+}
+
+function closeZoom() {
+  document.getElementById('lb-zoom').classList.remove('open');
+  document.getElementById('lb-zoom-img').src = '';
+}
+
+// Escape key closes both
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeZoom();
+    closeLightbox();
+  }
+});
+
+function switchVideo(btn, panel) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.video-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + panel).classList.add('active');
+}
+</script>
+</body>
+</html>
