@@ -7,7 +7,10 @@
     </div>
     <div class="video-tabs">
       <button class="tab" :class="{ active: activeTab === 'landscape' }" @click="activeTab = 'landscape'">Landscape</button>
-      <button class="tab" :class="{ active: activeTab === 'shorts' }" @click="activeTab = 'shorts'">Shorts</button>
+      <button class="tab shorts-tab" :class="{ active: activeTab === 'shorts' }" @click="switchToShorts">
+        Shorts
+        <span v-if="showDot" class="notif-dot"></span>
+      </button>
     </div>
 
     <!-- LANDSCAPE -->
@@ -49,9 +52,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const activeTab = ref('landscape')
+const showDot = ref(true)
+
+onMounted(() => {
+  // Check if user has already seen shorts
+  if (sessionStorage.getItem('shorts-seen') === 'true') {
+    showDot.value = false
+  }
+})
+
+function switchToShorts() {
+  activeTab.value = 'shorts'
+  showDot.value = false
+  sessionStorage.setItem('shorts-seen', 'true')
+}
 
 const landscapes = [
   { id: 'pwiyCeGrpZs', title: 'Video Edit #1' },

@@ -3,13 +3,13 @@
     <NavBar />
     <HeroSection />
     <ClientsStrip />
+    <MagazineFlip />
     <DesignGrid />
     <VideoSection />
     <AboutSection />
     <ExperienceSection />
     <DemoReel />
     <YearbookSection />
-    <MagazineFlip />
     <ContactSection />
   </div>
 </template>

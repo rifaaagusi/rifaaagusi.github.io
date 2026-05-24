@@ -1,10 +1,10 @@
-<style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{
     --bg:#0e0e0d;--surface:#161614;--surface2:#1f1f1c;
     --white:#f0ede6;--muted:#6b6a65;--border:#2a2a27;
     --accent:#ff5c1a;--accent-dim:rgba(255,92,26,0.12);
-    --font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;
+    --font-display: 'Gloock', serif;
+  --font-body: 'Inter', sans-serif;
   }
   html{scroll-behavior:smooth}
   body{font-family:var(--font-body);background:var(--bg);color:var(--white);font-size:15px;line-height:1.6;overflow-x:hidden}
@@ -16,6 +16,7 @@
   .nav-links{display:flex;gap:2rem}
   .nav-links a{font-size:11px;text-decoration:none;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;transition:color .2s}
   .nav-links a:hover{color:var(--accent)}
+  .nav-logo { text-decoration: none; }
 
   /* HERO */
   .hero{padding:6rem 2.5rem 5rem;display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:center;max-width:1040px;margin:0 auto}
@@ -31,7 +32,7 @@
   .btn-fill:hover{background:transparent;color:var(--accent)}
   /* hero-stats now inside .hero-right-col — see below */
   .stat-num{font-family:var(--font-display);font-size:2.2rem;font-weight:400;line-height:1}
-  .stat-num span{color:var(--accent);font-size:1.4rem}
+  .stat-num span{color:var(--white);font-size:1.4rem}
   .stat-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:5px}
 
   /* SECTION */
@@ -101,6 +102,25 @@
   .short-label-cat{font-size:10px;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
   .video-panel{display:none}
   .video-panel.active{display:block}
+  .shorts-tab {
+  position: relative;
+}
+
+.notif-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  background: #ff3b30;
+  border-radius: 50%;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.7; }
+}
 
   /* ABOUT */
   .about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem}
@@ -193,7 +213,7 @@
 
   /* CLIENTS */
   .clients-strip{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2.5rem 3.5rem;padding:1rem 0 0.5rem}
-  .client-logo{height:36px;width:auto;object-fit:contain;opacity:0.45;filter:grayscale(100%) brightness(1.8);transition:opacity .3s,filter .3s}
+  .client-logo{height:72px;width:auto;object-fit:contain;opacity:0.45;filter:grayscale(100%) brightness(1.8);transition:opacity .3s,filter .3s}
   .client-logo:hover{opacity:1;filter:grayscale(0%) brightness(1)}
 
   /* MAGAZINE FLIPBOOK */

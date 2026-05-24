@@ -2,11 +2,19 @@
   <hr class="sec-divider">
   <div class="sec" id="experience">
     <div class="sec-top">
-      <h2 class="sec-title">Experience</h2>
+      <h2 class="sec-title">Experiences</h2>
       <span class="sec-sub">3+ years across the creative pipeline</span>
     </div>
     <div class="exp-list">
-      <div class="exp-item" v-for="exp in experiences" :key="exp.role">
+      <motion.div
+        v-for="(exp, idx) in experiences"
+        :key="exp.role"
+        class="exp-item"
+        :initial="{ opacity: 0, y: 20 }"
+        :while-in-view="{ opacity: 1, y: 0 }"
+        :viewport="{ once: true, amount: 0.3 }"
+        :transition="{ duration: 0.5, delay: idx * 0.1 }"
+      >
         <div class="exp-date">
           {{ exp.date }}<br><br>
           <span class="exp-badge" :class="exp.badgeType">{{ exp.badge }}</span>
@@ -16,7 +24,7 @@
           <div class="exp-company">{{ exp.company }}</div>
           <div class="exp-desc">{{ exp.desc }}</div>
         </div>
-      </div>
+      </motion.div>
     </div>
   </div>
 </template>
