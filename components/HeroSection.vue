@@ -119,6 +119,11 @@ function animateCounter(el, target) {
     if (current >= target) {
       el.textContent = target
       clearInterval(timer)
+      // Trigger pulse animation
+      el.parentElement.style.animation = 'pulse-counter 0.8s ease-in-out'
+      setTimeout(() => {
+        el.parentElement.style.animation = ''
+      }, 800)
     } else {
       el.textContent = Math.floor(current)
     }
