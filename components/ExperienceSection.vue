@@ -2,7 +2,7 @@
   <hr class="sec-divider">
   <div class="sec" id="experience">
     <div class="sec-top">
-      <h2 class="sec-title">Experience</h2>
+      <h2 class="sec-title">Experiences</h2>
       <span class="sec-sub">3+ years across the creative pipeline</span>
     </div>
     <div class="exp-list">
